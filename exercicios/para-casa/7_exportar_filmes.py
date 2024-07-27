@@ -1,0 +1,25 @@
+import sqlite3
+import csv
+
+# Conectar ao banco de dados (ou criar um banco de dados)
+conn = sqlite3.connect('videoteca.db')
+cursor = conn.cursor()
+
+sql_query = ("SELECT * FROM filmes")
+
+cursor.execute(sql_query)
+datas = cursor.fetchall() #significa buscar todos os registros que foi selecionada pelo select
+
+with open('exportados_filmes.csv', 'w', newline='', encoding='utf-8') as csvfile:
+    escritor = csv.writer(csvfile)
+    escritor.writerow(['id','titulo', 'diretor', 'ano', 'genero', 'preco'])
+    escritor.writerows(datas)
+
+# Salva as alterações no banco de dados
+conn.commit()
+
+print('Filmes exportados para arquivo: exportados_filmes.csv')
+
+# Fecha a conexão
+cursor.close()
+conn.close()
